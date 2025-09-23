@@ -12,6 +12,7 @@ class Conversation implements ConversationRequirements {
   private ArrayList<String> userInput;
   private String lowerInput;
   boolean mirrored;
+  private String lastWord;
 
   /**
    * Constructor 
@@ -84,6 +85,9 @@ class Conversation implements ConversationRequirements {
 
     userInput = new ArrayList<>();
     String[] words = lowerInput.split(" ");
+    lastWord = words[words.length - 1] ;
+    lastWord = lastWord.substring(0,lastWord.length() - 1);
+    words[words.length - 1] = lastWord;
     java.util.Collections.addAll(userInput, words);
 
     for (int i = 0; i < words.length; i++) {
@@ -112,7 +116,7 @@ class Conversation implements ConversationRequirements {
       for (String word : words) {
         returnString += word + " ";
       }
-      returnString = Character.toUpperCase(returnString.charAt(0)) + returnString.trim() + "?";
+      returnString = Character.toUpperCase(returnString.charAt(0)) + returnString.substring(1).trim() + "?";
     } else {
       int randomIndex = (int) (Math.random() * cannedResponses.size());
       returnString = cannedResponses.get(randomIndex);
