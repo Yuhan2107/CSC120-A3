@@ -8,7 +8,7 @@ class Conversation implements ConversationRequirements {
   // Attributes 
   private int roundsLeft; // number of rounds left in the conversation
   private ArrayList<String> transcript; // transcript of the conversation
-  private ArrayList<String> cannedResponses;
+  private final ArrayList<String> cannedResponses;
   private ArrayList<String> userInput;
   private String lowerInput;
   boolean mirrored;
@@ -20,6 +20,13 @@ class Conversation implements ConversationRequirements {
     roundsLeft = 0;
     transcript = new ArrayList<>();
     cannedResponses = new ArrayList<>();
+      cannedResponses.add("Interesting, tell me more.");
+      cannedResponses.add("Hmmm.");
+      cannedResponses.add("Do you really think so?");
+      cannedResponses.add("You don't say.");
+      cannedResponses.add("That's quite fascinating.");
+      cannedResponses.add("Oh, I see.");
+      cannedResponses.add("Could you explain that?");
     userInput = new ArrayList<>();
     lowerInput = "";
     mirrored = false;
@@ -71,15 +78,7 @@ class Conversation implements ConversationRequirements {
   @Override
   public String respond(String inputString) {
     String returnString = ""; 
-
-    cannedResponses = new ArrayList<>();
-    cannedResponses.add("Interesting, tell me more.");
-    cannedResponses.add("Hmmm.");
-    cannedResponses.add("Do you really think so?");
-    cannedResponses.add("You don't say.");
-    cannedResponses.add("That's quite fascinating.");
-    cannedResponses.add("Oh, I see.");
-    cannedResponses.add("Could you explain that?");
+    mirrored = false;
 
     lowerInput = inputString.toLowerCase();
 
@@ -91,30 +90,21 @@ class Conversation implements ConversationRequirements {
       if (words[i].equals("i")) {
         words[i] = "you";
         mirrored = true;
-        break;
       } else if (words[i].equals("me")) {
         words[i] = "you";
         mirrored = true;
-        break;
       } else if (words[i].equals("my")) {
         words[i] = "your";
         mirrored = true;
-        break;
       } else if (words[i].equals("am")) {
         words[i] = "are";
         mirrored = true;
-        break;
       } else if (words[i].equals("you")) {
         words[i] = "I";
         mirrored = true;
-        break;
       } else if (words[i].equals("your")) {
         words[i] = "my";
         mirrored = true;
-        break;
-      }
-      else{
-        mirrored = false;
       }
     }
 
@@ -122,13 +112,12 @@ class Conversation implements ConversationRequirements {
       for (String word : words) {
         returnString += word + " ";
       }
-      returnString = returnString.trim() + "?";
+      returnString = Character.toUpperCase(returnString.charAt(0)) + returnString.trim() + "?";
     } else {
       int randomIndex = (int) (Math.random() * cannedResponses.size());
       returnString = cannedResponses.get(randomIndex);
     }
     
-
     return returnString; 
   }
 
