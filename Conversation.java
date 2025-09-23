@@ -1,27 +1,66 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
 
 class Conversation implements ConversationRequirements {
 
   // Attributes 
+  private int roundsLeft; // number of rounds left in the conversation
+  private ArrayList<String> transcript; // transcript of the conversation
+  private ArrayList<String> cannedResponses;
+  private ArrayList<String> userInput;
+  private String lowerInput;
+  boolean mirrored;
 
   /**
    * Constructor 
    */
   Conversation() {
-    
+    roundsLeft = 0;
+    transcript = new ArrayList<>();
+    cannedResponses = new ArrayList<>();
+    userInput = new ArrayList<>();
+    lowerInput = "";
+    mirrored = false;
   }
 
   /**
    * Starts and runs the conversation with the user
    */
+  @Override
   public void chat() {
-
+      Scanner scanner = new Scanner(System.in);
+      transcript = new ArrayList<>();
+          
+      System.out.println("Hello, how many rounds would you like to play?");
+      transcript.add("Hello, how many rounds would you like to play?");
+      this.roundsLeft = scanner.nextInt();
+      transcript.add(Integer.toString(this.roundsLeft));
+      scanner.nextLine();
+      System.out.println("Great! Let's start our conversation. Say anything you want.");
+      transcript.add("Great! Let's start our conversation. Say anything you want.");
+      
+      while(roundsLeft > 0) {
+          String userLine = scanner.nextLine();
+          transcript.add(userLine);
+          String response = respond(userLine);
+          System.out.println(response);
+          transcript.add(response);
+          roundsLeft--;
+      } 
+    System.out.println("It was nice talking to you! Goodbye!");
   }
 
   /**
    * Prints transcript of conversation
    */
+  @Override
   public void printTranscript() {
-
+    System.out.println("Here is the transcript of our conversation:");
+    for (String line : transcript) {
+      System.out.println(line);
+    }
   }
 
   /**
@@ -29,8 +68,67 @@ class Conversation implements ConversationRequirements {
    * @param inputString the users last line of input
    * @return mirrored or canned response to user input  
    */
+  @Override
   public String respond(String inputString) {
     String returnString = ""; 
+
+    cannedResponses = new ArrayList<>();
+    cannedResponses.add("Interesting, tell me more.");
+    cannedResponses.add("Hmmm.");
+    cannedResponses.add("Do you really think so?");
+    cannedResponses.add("You don't say.");
+    cannedResponses.add("That's quite fascinating.");
+    cannedResponses.add("Oh, I see.");
+    cannedResponses.add("Could you explain that?");
+
+    lowerInput = inputString.toLowerCase();
+
+    userInput = new ArrayList<>();
+    String[] words = lowerInput.split(" ");
+    java.util.Collections.addAll(userInput, words);
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].equals("i")) {
+        words[i] = "you";
+        mirrored = true;
+        break;
+      } else if (words[i].equals("me")) {
+        words[i] = "you";
+        mirrored = true;
+        break;
+      } else if (words[i].equals("my")) {
+        words[i] = "your";
+        mirrored = true;
+        break;
+      } else if (words[i].equals("am")) {
+        words[i] = "are";
+        mirrored = true;
+        break;
+      } else if (words[i].equals("you")) {
+        words[i] = "I";
+        mirrored = true;
+        break;
+      } else if (words[i].equals("your")) {
+        words[i] = "my";
+        mirrored = true;
+        break;
+      }
+      else{
+        mirrored = false;
+      }
+    }
+
+    if (mirrored) {
+      for (String word : words) {
+        returnString += word + " ";
+      }
+      returnString = returnString.trim() + "?";
+    } else {
+      int randomIndex = (int) (Math.random() * cannedResponses.size());
+      returnString = cannedResponses.get(randomIndex);
+    }
+    
+
     return returnString; 
   }
 
