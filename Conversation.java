@@ -85,9 +85,11 @@ class Conversation implements ConversationRequirements {
 
     userInput = new ArrayList<>();
     String[] words = lowerInput.split(" ");
-    lastWord = words[words.length - 1] ;
-    lastWord = lastWord.substring(0,lastWord.length() - 1);
-    words[words.length - 1] = lastWord;
+    lastWord = words[words.length-1];
+    if (lastWord.endsWith(".") || lastWord.endsWith("!") || lastWord.endsWith("?") || lastWord.endsWith("~")){
+      lastWord = lastWord.substring(0,lastWord.length() - 1);
+      words[words.length - 1] = lastWord;
+    }
     java.util.Collections.addAll(userInput, words);
 
     for (int i = 0; i < words.length; i++) {
