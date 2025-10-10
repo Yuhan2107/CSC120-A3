@@ -111,6 +111,13 @@ class Conversation implements ConversationRequirements {
       } else if (words[i].equals("your")) {
         words[i] = "my";
         mirrored = true;
+      } else if (words[i].equals("i'm")) {
+        words[i] = "you're";
+        mirrored = true;
+      }
+      else if (words[i].equals("you're")) {
+        words[i] = "I'm";
+        mirrored = true;
       }
     }
 
